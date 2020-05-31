@@ -1,0 +1,81 @@
+﻿@model ViewModels.PostViewModel
+
+@{
+    ViewData["Title"] = "Edit";
+    var PostTags = ViewBag.PostTags as IEnumerable<ViewModels.PostTagViewModel>;
+}
+
+<h1>Post Edit</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <label asp-for="Contents" class="control-label"></label>
+                <input asp-for="Contents" class="form-control" />
+                <span asp-validation-for="Contents" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="BlogId" class="control-label"></label>
+                <select disabled asp-for="BlogId" class="form-control" asp-items="ViewBag.BlogId"></select>
+                <span asp-validation-for="BlogId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+ 
+<h4>Tags</h4>
+ 
+<br />
+
+<p>
+    <a asp-action="AddTag" asp-route-id="@Model.Id">Add Tag</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Tag ID
+            </th>
+            <th>
+                Tag Name
+            </th>
+            <th>
+
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in PostTags)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TagId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TagName)
+                </td>
+                <td>
+                    @Html.ActionLink("Remove tag", "DeleteTag",
+                        new { PostId = item.PostId, TagId = item.TagId })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
